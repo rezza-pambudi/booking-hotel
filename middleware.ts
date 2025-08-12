@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
-    isLoggedIn &&
+    !isLoggedIn &&
     ProtectedRoutes.some((route) => pathname.startsWith(route))
   ) {
     return NextResponse.redirect(new URL("/signin", request.url))
