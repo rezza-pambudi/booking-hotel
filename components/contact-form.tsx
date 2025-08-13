@@ -2,16 +2,20 @@
 
 import { useActionState } from "react";
 import { ContactMassage } from "@/lib/actions";
+import clsx from "clsx";
 
 const ContactForm = () => {
-    const [state, formAction] = useActionState(ContactMassage, null)
+  const [state, formAction, isPending] = useActionState(ContactMassage, null);
   return (
     <div className="bg-white p-8 rounded-sm">
-    { state?.message ? (
-        <div className="p-4 mb-4 text-sm text-grey-800 rounded-lg bg-green-50" role="alert">
-            <div className="font-medium">{state.message}</div>
+      {state?.message ? (
+        <div
+          className="p-4 mb-4 text-sm text-grey-800 rounded-lg bg-green-50"
+          role="alert"
+        >
+          <div className="font-medium">{state.message}</div>
         </div>
-    ): null}
+      ) : null}
       <form action={formAction}>
         <div className="grid md:grid-cols-2 gap-7 mt-6">
           <div>
@@ -44,7 +48,9 @@ const ContactForm = () => {
               placeholder="Subject*"
             />
             <div aria-live="polite" aria-atomic="true">
-              <p className="text-sm text-red-500 mt-2">{state?.error?.subject}</p>
+              <p className="text-sm text-red-500 mt-2">
+                {state?.error?.subject}
+              </p>
             </div>
           </div>
           <div className="md:col-span-2">
@@ -55,15 +61,23 @@ const ContactForm = () => {
               placeholder="Your Message*"
             ></textarea>
             <div aria-live="polite" aria-atomic="true">
-              <p className="text-sm text-red-500 mt-2">{state?.error?.message}</p>
+              <p className="text-sm text-red-500 mt-2">
+                {state?.error?.message}
+              </p>
             </div>
           </div>
         </div>
         <button
           type="submit"
-          className="px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer mt-6"
+          className={clsx(
+            "px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer mt-6",
+            {
+              "opacity-50 cursor-progress animate-pulse": isPending,
+            }
+          )}
+          disabled={isPending}
         >
-          Send Message
+          {isPending ? "Sending..." : "Send Message"}
         </button>
       </form>
     </div>
