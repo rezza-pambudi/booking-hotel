@@ -5,9 +5,9 @@ import { IoCloudUploadOutline, IoTrashOutline } from "react-icons/io5";
 import { type PutBlobResult } from "@vercel/blob";
 import Image from "next/image";
 import { BarLoader } from "react-spinners";
-import { set } from "zod";
+import { Amenities } from "@/generated/prisma";
 
-const CreateForm = () => {
+const CreateForm = ({ amenities }: { amenities: Amenities[] }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState("");
   const [message, setMessage] = useState("");
@@ -75,14 +75,20 @@ const CreateForm = () => {
             </div>
           </div>
           <div className="mb-4 grid md:grid-cols-3 ">
-            <input
-              type="checkbox"
-              name="amenities"
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-            />
-            <label className="ms-2 text-sm font-medium text-gray-900 capitalize">
-              Spa
-            </label>
+            {amenities.map((item) => (
+              <div className="flex items-center mb-4" key={item.id}>
+                <input
+                  type="checkbox"
+                  name="amenities"
+                  defaultValue={item.id}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                />
+                <label className="ms-2 text-sm font-medium text-gray-900 capitalize">
+                  {item.name}
+                </label>
+              </div>
+            ))}
+
             <div aria-live="polite" aria-atomic="true">
               <span className="text-sm text-red-500 mt:2">Message</span>
             </div>
